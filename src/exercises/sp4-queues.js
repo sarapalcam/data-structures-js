@@ -1,5 +1,5 @@
-import { MaxPriorityQueue } from "@datastructures-js/priority-queue";
-import { Stack } from "@datastructures-js/stack";
+import { MaxPriorityQueue } from '@datastructures-js/priority-queue';
+import { Stack } from '@datastructures-js/stack';
 
 /**
  * Ref: https://www.hackerearth.com/practice/data-structures/queues/basics-of-queues/practice-problems/algorithm/disk-tower-b7cc7a50/
@@ -20,35 +20,29 @@ import { Stack } from "@datastructures-js/stack";
 const disk_tower = (disks_provided) => {
   let tower = [];
   let queue = new MaxPriorityQueue();
-  let size = disks_provided.length + 1;
   for (let i = 0; i < disks_provided.length; i++) {
-    size--;
-    
-    if(disks_provided[i] >= size){
-      if (queue.isEmpty === false){
-        if(queue.toArray()[0] > size){
-          for (let j = 0; j < queue.toArray().length; j++) {
-            if(queue.toArray()[j] > disks_provided[i]){
-              tower.push(queue.toArray()[j])
-            }
-          }
-          tower.push(disks_provided[i])
-        } else if (queue.toArray()[0] === size){
-          tower.push(disks_provided[i], queue.toArray()[0]);
-          queue.dequeue()
-        }
+    if (disks_provided[i] === disks_provided.length) {
+      tower.push(disks_provided[i]);
+    } else {
+      if (disks_provided[i] === tower[tower.length - 1] - 1) {
+        tower.push(disks_provided[i]);
       } else {
-        tower.push([disks_provided[i]]);
+        queue.enqueue(disks_provided[i]);
       }
-    } else if (disks_provided[i] < size) {
-      tower.push([]);
-      queue.enqueue(disks_provided[i]);
+      for (let j = 0; j <= queue.toArray().length; j++) {
+        if (queue.toArray()[0].element === tower[tower.length - 1] - 1) {
+          tower.push(queue.toArray()[0].element);
+          queue.dequeue();
+        }
+      }
     }
+    console.log("Day" + parseInt(i + 1) + "=>" + JSON.stringify(tower))
   }
-  console.log(tower);
-  console.log(queue.toArray());
 };
 
+//Si el primero llega el último se rompe, pensar cómo arreglarlo
 disk_tower([4, 5, 1, 2, 3]);
 
-// disk_tower([4,5,1,2,3]).forEach((disks, day) => console.log('Day',day + 1,'=>',JSON.stringify(disks)));
+//disk_tower([4,5,1,2,3]).forEach((disks, day) => console.log('Day',day + 1,'=>',JSON.stringify(disks)));
+
+
